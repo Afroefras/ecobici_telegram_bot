@@ -3,20 +3,21 @@ from io import BytesIO
 from dateutil import tz
 from pathlib import Path
 from zipfile import ZipFile
+from datetime import datetime
 from json import loads as loads_json
 from PIL.Image import open as open_image
-from datetime import datetime, timedelta
 from requests import get as get_request
 
 # Ingeniería de variables
 from geopandas import read_file
-from pandas import DataFrame, Timestamp, json_normalize, read_csv, concat
+from pandas import DataFrame, json_normalize
 
 # Gráficas
 from seaborn import scatterplot
 from matplotlib.lines import Line2D
 from contextily import add_basemap, providers
-from matplotlib.pyplot import Axes, Figure, get_cmap
+from matplotlib.pyplot import Axes, Figure, get_cmap, switch_backend
+switch_backend('Agg')
 
 # # Twitter
 # from twython import Twython
@@ -26,7 +27,7 @@ from matplotlib.pyplot import Axes, Figure, get_cmap
 # import ecoTad, ecoPredict
 
 class EcoBiciMap:
-    def __init__(self, client_id: str, client_secret: str, telegram_api: str, is_local: bool=True) -> None:
+    def __init__(self, client_id: str, client_secret: str, is_local: bool=True) -> None:
         '''
         Define el directorio base, la URL base y las credenciales para el acceso a la API Ecobici
         :client_id: user_uuid proporcionado por Ecobici. Más info en: https://www.ecobici.cdmx.gob.mx/sites/default/files/pdf/manual_api_opendata_esp_final.pdf 
@@ -127,14 +128,15 @@ class EcoBiciMap:
         :slots_col:     columna que indica los slots vacíos
         '''
         # Filtra el código postal elegido
-        self.st = self.st[self.st[zipcode_col]==zipcode].copy()
+        df = self.st[self.st[zipcode_col]==zipcode].copy()
         # Une la información de estaciones con la disponibilidad de las mismas
-        self.df = self.st[station_cols].merge(self.av, on=id_col)
+        df = df[station_cols].merge(self.av, on=id_col)
         # Sólo las estaciones con estatus disponible
-        self.df = self.df[self.df[status_col]=='OPN'].copy()
+        df = df[df[status_col]=='OPN'].copy()
         # Calcula la proporción de disponibilidad, tanto de bicicletas, como de slots vacíos
-        self.df['slots_proportion'] = self.df[slots_col] / (self.df[slots_col] + self.df[bikes_col])
-        self.df['bikes_proportion'] = 1 - self.df['slots_proportion']
+        df['slots_proportion'] = df[slots_col] / (df[slots_col] + df[bikes_col])
+        df['bikes_proportion'] = 1 - df['slots_proportion']
+        return df
 
 
     def set_custom_legend(self, ax, cmap, values: list) -> None:
@@ -156,8 +158,10 @@ class EcoBiciMap:
         ax.set_axis_off()
         
         # Delimita el tamaño dependiendo el rango de las coordenadas
-        ax.set_ylim((data[lat_col].min() - padding, data[lat_col].max() + padding))
-        ax.set_xlim((data[lon_col].min() - padding, data[lon_col].max() + padding))
+        try:
+            ax.set_ylim((data[lat_col].min() - padding, data[lat_col].max() + padding))
+            ax.set_xlim((data[lon_col].min() - padding, data[lon_col].max() + padding))
+        except: pass
 
         # Grafica el mapa de las colonias en CDMX
         self.gdf.plot(ax=ax, figsize=(8, 8), linewidth=0.5, **kwargs)
@@ -169,7 +173,7 @@ class EcoBiciMap:
         scatterplot(y=lat_col, x=lon_col, data=data, ax=ax, palette=cmap, hue=col_to_plot)
 
         # Modifica las etiquetas para indicar el significado del color en las estaciones
-        self.set_custom_legend(ax, cmap, values=[(0.0, 'Hay bicis'), (0.5, 'Puede haber'), (1.0, 'No hay bicis')])
+        self.set_custom_legend(ax, cmap, values=[(0.0, 'Sin bicis'), (0.5, 'Algunas bicis'), (1.0, 'Muchas bicis')])
         # Guarda la imagen
         self.eb_map[img_name] = fig
         self.eb_map[img_name].savefig(self.media_dir.joinpath(f'{img_name}.png'))
@@ -187,16 +191,3 @@ class EcoBiciMap:
     #     self.pred['prediction'] = self.pred['prediction'].map(lambda x: 0 if x<0 else x)
     #     self.pred['bikes_proportion'] = 1 - self.pred['prediction'] / (self.pred['availability.bikes'] + self.pred['availability.slots'])
     #     self.pred['bikes_proportion'] = self.pred['bikes_proportion'].map(lambda x: 0 if x<0 else x)
-
-
-    def get_map(self, img_name: str, zipcode: str, shp_first_time: bool=True, **kwargs) -> None:
-        self.get_token(first_time=True)
-        self.st = self.get_data()
-        self.av = self.get_data(availability=True)
-
-        if shp_first_time: self.get_shapefile()
-        else: self.gdf = read_file(self.shapefile_dir).to_crs(epsg=4326)
-
-        self.transform(zipcode=zipcode)
-        img = self.plot_map(data=self.df, col_to_plot='bikes_proportion', img_name=f'{img_name}', **kwargs)
-        return img
