@@ -19,10 +19,6 @@ from contextily import add_basemap, providers
 from matplotlib.pyplot import Axes, Figure, get_cmap, switch_backend
 switch_backend('Agg')
 
-# # Twitter
-# from twython import Twython
-
-
 # # Modelo
 # import ecoTad, ecoPredict
 
@@ -150,7 +146,8 @@ class EcoBiciMap:
         ax.legend(handles=legend_elements, loc="upper left", prop={"size": 4}, ncol=len(values))
 
 
-    def plot_map(self, data: DataFrame, col_to_plot: str, lat_col: str='location.lat', lon_col: str='location.lon', img_name: str='map', padding: float=0.007, points_palette: str='mako', **kwargs) -> None:
+    def plot_map(self, data: DataFrame, col_to_plot='slots_proportion', img_name='map', padding=0.006, points_palette='Blues', lat_col: str='location.lat', lon_col: str='location.lon', **kwargs) -> None:
+        
         # Crea el lienzo para graficar el mapa
         fig = Figure(figsize=(5, 4), dpi=200, frameon=False)
         ax = Axes(fig, [0.0, 0.0, 1.0, 1.0])

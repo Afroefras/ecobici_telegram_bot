@@ -26,29 +26,30 @@ bot = TeleBot(TELEGRAM_API_KEY)
 def test(message):
 	bot.reply_to(message, message.text)
 
+
+
 def filter_zipcode(message):
   request = message.text.split()
   if request[0].lower()=='zipcode' and request[1] in valid_zipcodes: return True
   else: return False
 
-
-# SIGUIENTES PASOS:
-# OPCIONES PARA ELEGIR EL DISTRITO
-
 @bot.message_handler(func=filter_zipcode)
 def send_map(message):
 	to_filter = message.text.split()[1]
 	df = ebm.transform(zipcode=to_filter)
-	img = ebm.plot_map(
-		data=df,
-		col_to_plot='slots_proportion',
-		img_name='map',
-		padding=0.006,
-		color='#ffffff',
-		edgecolor='#00acee', 
-		points_palette='Blues'
-	)
+	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
 	print(f'Sent CP: {to_filter}!')
+
+
+'''
+Polanco             43
+Roma Norte          37
+Centro              30
+Del Valle Centro    29
+Juárez              27
+'''
+
+
 
 bot.infinity_polling()
