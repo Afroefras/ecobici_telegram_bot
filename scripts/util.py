@@ -1,6 +1,7 @@
 # Ingeniería de variables
 from numpy import nan
 from re import sub, UNICODE
+from pandas import DataFrame
 from unicodedata import normalize
 from difflib import SequenceMatcher, get_close_matches
 
@@ -33,3 +34,9 @@ class UtilClass:
         closest_options = [options_dict[x] for x in closest_clean_options]
         if SequenceMatcher(None, text, closest_options[0]).ratio() > 0.95: return [closest_options[0]]
         else: return closest_options
+
+    
+    def show_grouped(self, df: DataFrame, to_group: str, to_agg:str) -> tuple:
+        df = df[[to_group,to_agg]].drop_duplicates().sort_values(to_agg)
+        df = df.astype(str).pivot_table(index=to_group, values=to_agg, aggfunc=', '.join)
+        return df.index, df[to_agg].values

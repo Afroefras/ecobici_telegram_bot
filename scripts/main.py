@@ -11,6 +11,8 @@ ECOBICI_CLIENT_ID = '2199_132ley5lk3404wkk4c4w4ggo48kwcokosogg0k0www84s08gs'
 ECOBICI_CLIENT_SECRET = '61xytd2ketssok44g4kkckwogkg048gk0ok48sc0k0wgc8scs'
 TELEGRAM_API_KEY = '5424781174:AAGSCoHB5NXzsdRPPRR-9qXQ8VtuLhT8I34'
 
+district_col = 'districtName'
+zipcode_col = 'zipcodeName'
 
 # ETL del mapa en tiempo real
 ebm = EcoBiciMap(ECOBICI_CLIENT_ID, ECOBICI_CLIENT_SECRET, is_local=True)
@@ -18,9 +20,9 @@ ebm.get_token(first_time=True)
 ebm.st = ebm.get_data()
 ebm.av = ebm.get_data(availability=True)
 ebm.get_shapefile()
-valid_districts = set(ebm.st['districtName'].astype(str))
-valid_zipcodes = set(ebm.st['zipCode'].astype(str))
-sorted_zipcodes = set(ebm.st[['districtName', 'zipCode']].astype(str).apply(':\t\t\t'.join, axis=1))
+valid_districts = set(ebm.st[district_col].astype(str))
+valid_zipcodes = set(ebm.st[zipcode_col].astype(str))
+sorted_zipcodes = set(ebm.st[[district_col, zipcode_col]].astype(str).apply(':\t\t\t'.join, axis=1))
 print('Map ready!')
 
 
@@ -45,12 +47,12 @@ def test(message):
 # Mapa para el código postal indicado
 def filter_zipcode(message):
 	request = message.text.split()
-	if request[0].lower()=='zipcode' and request[1] in valid_zipcodes: return True
+	if request[0].lower()==zipcode_col and request[1] in valid_zipcodes: return True
 	else: return False
 @bot.message_handler(func=filter_zipcode)
 def send_map(message):
 	zipcode = message.text.split()[1]
-	df = ebm.transform(filter_col='zipCode', filter_value=zipcode)
+	df = ebm.transform(filter_col=zipcode_col, filter_value=zipcode)
 	if df.shape[0] == 0: bot.reply_to(message, f'Código postal: {zipcode} no cuenta con información disponible')
 	else:
 		img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
@@ -71,7 +73,7 @@ def district_clear(message):
 @bot.message_handler(func=district_clear)
 def send_map(message):
 	district = ebm.district_options[0]
-	df = ebm.transform(filter_col='districtName', filter_value=district)
+	df = ebm.transform(filter_col=district_col, filter_value=district)
 	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
 	bot.reply_to(message, f'Colonia {district}:')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
@@ -94,54 +96,5 @@ def send_options_then_map(message):
 	for district_option in ebm.district_options:
 		markup.add(KeyboardButton(f'Colonia {district_option}'))
 	bot.send_message(message.chat.id, "¿Qué colonia quieres ver?", reply_markup=markup)
-
-	# @bot.message_handler(func=lambda message: message.content_type == 'text' and message.text in ebm.district_options)
-	# def send_map_after_options(message):
-	# 	district = message
-	# 	df = ebm.transform(filter_col='districtName', filter_value=district)
-	# 	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
-	# 	bot.send_photo(chat_id=message.chat.id, photo=img)
-	# 	print(f'Sent options!')
-
-
-
-
-
-
-# def filter_district(message):
-# 	request = message.text.split()
-# 	district = ' '.join(request[1:])
-# 	ebm.district_options = ebm.give_options(district, valid_districts, n=4, cutoff=0.6)
-# 	if request[0].lower()[:3]=='col' and any(map(lambda x: x in valid_districts, ebm.district_options)): return True
-# 	else: return False
-
-# @bot.message_handler(func=filter_district)
-# def send_map(message):
-# 	if len(ebm.district_options) == 1: district = ebm.district_options[0]
-# 	else: 
-# 		bot.reply_to(message, 'Las opciones podrían ser:\n\n-'+'\n-'.join([str(x) for x in ebm.district_options]))
-# 		# Using the ReplyKeyboardMarkup class
-# 		# It's constructor can take the following optional arguments:
-# 		# - resize_keyboard: True/False (default False)
-# 		# - one_time_keyboard: True/False (default False)
-# 		# - selective: True/False (default False)
-# 		# - row_width: integer (default 3)
-# 		markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=False, one_time_keyboard=True)
-# 		all_items = {}
-# 		for district_option in ebm.district_options:
-# 			all_items[district_option] = KeyboardButton(district_option)
-# 			markup.add(all_items[district_option])
-# 		# itembtn1 = KeyboardButton('a')
-# 		# itembtn2 = KeyboardButton('v')
-# 		# itembtn3 = KeyboardButton('d')
-# 		# markup.add(itembtn1, itembtn2, itembtn3)
-# 		bot.send_message(message.chat.id, "¿Qué colonia quieres ver?", reply_markup=markup)
-
-# 	df = ebm.transform(filter_col='districtName', filter_value=district)
-# 	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
-# 	bot.send_photo(chat_id=message.chat.id, photo=img)
-# 	print(f'Sent options!')
-
-
 
 bot.infinity_polling()
