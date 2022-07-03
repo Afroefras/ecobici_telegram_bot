@@ -158,10 +158,10 @@ class EcoBiciMap(UtilClass):
         ax.set_axis_off()
         
         # Delimita el tamaño dependiendo el rango de las coordenadas
-        try:
-            ax.set_ylim((data[lat_col].min() - padding, data[lat_col].max() + padding))
-            ax.set_xlim((data[lon_col].min() - padding, data[lon_col].max() + padding))
-        except: pass
+        
+        ax.set_ylim((data[lat_col].min() - padding, data[lat_col].max() + padding))
+        ax.set_xlim((data[lon_col].min() - padding, data[lon_col].max() + padding))
+        # except: pass
 
         # Grafica el mapa de las colonias en CDMX
         self.gdf.plot(ax=ax, figsize=(8, 8), linewidth=0.5, **kwargs)

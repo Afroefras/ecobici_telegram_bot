@@ -1,13 +1,13 @@
 # Ingeniería de variables
-from distutils.command.clean import clean
 from numpy import nan
 from re import sub, UNICODE
 from unicodedata import normalize
-from difflib import get_close_matches
-from pandas import DataFrame, options
-options.mode.chained_assignment = None
+from difflib import SequenceMatcher, get_close_matches
 
 class UtilClass:
+    def __init__(self) -> None:
+        pass
+
     def clean_text(self, text: str, pattern: str="[^a-zA-Z0-9\s]", lower: bool=True) -> str: 
         '''
         Limpieza de texto
@@ -31,4 +31,5 @@ class UtilClass:
         options_dict = dict(zip(clean_options, valid_options))
         closest_clean_options = get_close_matches(clean, clean_options, **kwargs)
         closest_options = [options_dict[x] for x in closest_clean_options]
-        return closest_options
+        if SequenceMatcher(None, text, closest_options[0]).ratio() > 0.95: return [closest_options[0]]
+        else: return closest_options
