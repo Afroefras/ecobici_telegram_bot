@@ -117,7 +117,7 @@ class EcoBiciMap(UtilClass):
         self.gdf = read_file(self.shapefile_dir).to_crs(epsg=4326)
 
 
-    def transform(self, filter_col: str, filter_value: str, station_cols: list=['id','zipCode','location.lat','location.lon'], id_col: str='id', status_col: str='status', bikes_col: str='availability.bikes', slots_col: str='availability.slots') -> None:
+    def transform(self, filter_col: str=None, filter_value: str=None, station_cols: list=['id','zipCode','location.lat','location.lon'], id_col: str='id', status_col: str='status', bikes_col: str='availability.bikes', slots_col: str='availability.slots') -> None:
         '''
         Une las tablas de estaciones y disponibilidad. Crea las variables de proporción en bicicletas y slots vacíos
         :station_cols:  columnas de interés respecto a la tabla de estaciones
@@ -126,8 +126,9 @@ class EcoBiciMap(UtilClass):
         :bikes_col:     columna que indica las bicicletas disponibles
         :slots_col:     columna que indica los slots vacíos
         '''
-        # Filtra el código postal elegido
-        df = self.st[self.st[filter_col]==filter_value].copy()
+        # Filtra un subconjunto si es indicado
+        if filter_col is None or filter_value is None: df = self.st.copy()
+        else: df = self.st[self.st[filter_col]==filter_value].copy()
         # Une la información de estaciones con la disponibilidad de las mismas
         df = df[station_cols].merge(self.av, on=id_col)
         # Sólo las estaciones con estatus disponible

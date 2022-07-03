@@ -26,21 +26,19 @@ class UtilClass:
         return clean
 
     
-    def give_options(self, text: str, valid_options: list, **kwargs) -> list:
+    def give_options(self, text: str, valid_options: list, max_options: int, **kwargs) -> list:
         clean = self.clean_text(text)
         clean_options = list(map(self.clean_text, valid_options))
         options_dict = dict(zip(clean_options, valid_options))
         closest_clean_options = get_close_matches(clean, clean_options, **kwargs)
-        print(closest_clean_options)
         closest_clean_options.extend([x for x in clean_options if re_search(f'.*{clean}.*', x)])
-        print(closest_clean_options)
 
         closest_options = []
         for x in closest_clean_options:
-            if x not in closest_options: closest_options.append(options_dict[x])
+            if x not in map(self.clean_text, closest_options): closest_options.append(options_dict[x])
         
         if SequenceMatcher(None, text, closest_options[0]).ratio() > 0.95: return [closest_options[0]]
-        else: return closest_options
+        else: return closest_options[:max_options]
 
     
     def show_grouped(self, df: DataFrame, to_group: str, to_agg:str) -> tuple:

@@ -34,11 +34,13 @@ def test(message):
 	bot.send_message(
 		message.chat.id,
 		'''
-		Hola! Soy EcobiciMapBot y aquí puedes consultar qué tantas bicis hay disponibles en CDMX 🚴🏾‍♀️🚴🏾‍♂️
-		\nPara ver este tutorial de nuevo sólo tienes que mandar /help
+		Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar qué tantas bicis hay disponibles en CDMX 🚴🏾‍♀️🚴🏾‍♂️
+		\n¿Quieres ver este tutorial de nuevo? Sólo tienes que mandar /help 
 
-		\nAhora sí, 
-
+		\nAhora sí, las instrucciones son simples:
+		\n\t- /todo         Disponibilidad en CDMX
+		\n\t- /colonias     Lista de colonias disponibles
+		\n\t- /colonias     Lista de códigos postales disponibles
 		'''
 	)
 
@@ -60,10 +62,20 @@ def zipcodes_info(message):
 	 	- ''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(zipcodes, districts))))
 
 
+# Consulta todo el mapa
+@bot.message_handler(commands=['todo'])
+def full_map(message):
+	df = ebm.transform()
+	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
+	bot.reply_to(message, 'Disponibilidad en vivo:')
+	bot.send_photo(chat_id=message.chat.id, photo=img)
+	print('Map sent!')
+
+
 # Mapa para el código postal indicado
 def filter_zipcode(message):
 	request = message.text.split()
-	if request[0].lower()==zipcode_col and request[1] in valid_zipcodes: return True
+	if request[0].lower()=='zipcode' and request[1] in valid_zipcodes: return True
 	else: return False
 @bot.message_handler(func=filter_zipcode)
 def send_map(message):
@@ -74,7 +86,7 @@ def send_map(message):
 		img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
 		bot.reply_to(message, f'Código Postal {zipcode}:')
 		bot.send_photo(chat_id=message.chat.id, photo=img)
-		print(f'Sent CP: {zipcode}!')
+		print(f'CP: {zipcode} sent!')
 
 
 # Mapa para la colonia cuando la consulta del usuario devuelve sólo una opción
@@ -82,7 +94,7 @@ def district_clear(message):
 	request = message.text.split()
 	if request[0].lower()[:3]=='col':
 		district = ' '.join(request[1:])
-		ebm.district_options = ebm.give_options(district, valid_districts, n=4, cutoff=0.6)
+		ebm.district_options = ebm.give_options(district, valid_districts, max_options=1, n=1, cutoff=0.6)
 		if len(ebm.district_options)==1: return True
 		else: return False
 	else: return False
@@ -93,7 +105,7 @@ def send_map(message):
 	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
 	bot.reply_to(message, f'Colonia {district}:')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
-	print(f'Sent map of {district}!')
+	print(f'{district} map sent!')
 
 
 # Mapa para la colonia cuando la consulta del usuario devuelve más de una opción
@@ -101,7 +113,7 @@ def district_not_clear(message):
 	request = message.text.split()
 	if request[0].lower()[:3]=='col':
 		district = ' '.join(request[1:])
-		ebm.district_options = ebm.give_options(district, valid_districts, n=4, cutoff=0.6)
+		ebm.district_options = ebm.give_options(district, valid_districts, max_options=5, n=5, cutoff=0.6)
 		if len(ebm.district_options) > 1: return True
 		else: return False
 	else: return False
