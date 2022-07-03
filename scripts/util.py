@@ -1,8 +1,8 @@
 # Ingeniería de variables
 from numpy import nan
-from re import sub, UNICODE
 from pandas import DataFrame
 from unicodedata import normalize
+from re import sub, UNICODE, search as re_search
 from difflib import SequenceMatcher, get_close_matches
 
 class UtilClass:
@@ -31,7 +31,14 @@ class UtilClass:
         clean_options = list(map(self.clean_text, valid_options))
         options_dict = dict(zip(clean_options, valid_options))
         closest_clean_options = get_close_matches(clean, clean_options, **kwargs)
-        closest_options = [options_dict[x] for x in closest_clean_options]
+        print(closest_clean_options)
+        closest_clean_options.extend([x for x in clean_options if re_search(f'.*{clean}.*', x)])
+        print(closest_clean_options)
+
+        closest_options = []
+        for x in closest_clean_options:
+            if x not in closest_options: closest_options.append(options_dict[x])
+        
         if SequenceMatcher(None, text, closest_options[0]).ratio() > 0.95: return [closest_options[0]]
         else: return closest_options
 

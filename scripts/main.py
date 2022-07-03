@@ -1,5 +1,5 @@
 from etl import EcoBiciMap
-from telebot import TeleBot
+from telebot import TeleBot, formatting
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 
 # from os import getenv
@@ -12,7 +12,7 @@ ECOBICI_CLIENT_SECRET = '61xytd2ketssok44g4kkckwogkg048gk0ok48sc0k0wgc8scs'
 TELEGRAM_API_KEY = '5424781174:AAGSCoHB5NXzsdRPPRR-9qXQ8VtuLhT8I34'
 
 district_col = 'districtName'
-zipcode_col = 'zipcodeName'
+zipcode_col = 'zipCode'
 
 # ETL del mapa en tiempo real
 ebm = EcoBiciMap(ECOBICI_CLIENT_ID, ECOBICI_CLIENT_SECRET, is_local=True)
@@ -22,7 +22,6 @@ ebm.av = ebm.get_data(availability=True)
 ebm.get_shapefile()
 valid_districts = set(ebm.st[district_col].astype(str))
 valid_zipcodes = set(ebm.st[zipcode_col].astype(str))
-sorted_zipcodes = set(ebm.st[[district_col, zipcode_col]].astype(str).apply(':\t\t\t'.join, axis=1))
 print('Map ready!')
 
 
@@ -32,16 +31,33 @@ bot = TeleBot(TELEGRAM_API_KEY)
 # Instrucciones de uso
 @bot.message_handler(commands=['start','help'])
 def test(message):
-	bot.reply_to(message, 'EcobiciMapBot')
+	bot.send_message(
+		message.chat.id,
+		'''
+		Hola! Soy EcobiciMapBot y aquí puedes consultar qué tantas bicis hay disponibles en CDMX 🚴🏾‍♀️🚴🏾‍♂️
+		\nPara ver este tutorial de nuevo sólo tienes que mandar /help
+
+		\nAhora sí, 
+
+		'''
+	)
 
 
 # Consultar las colonias y/o códigos postales disponibles
 @bot.message_handler(commands=['colonias'])
-def test(message):
-	bot.reply_to(message, '\n'.join(sorted(valid_districts)))
+def districts_info(message):
+	districts, zipcodes = ebm.show_grouped(ebm.st, to_group=district_col, to_agg=zipcode_col)
+	bot.reply_to(
+		message, 
+		'''Las colonias disponibles (y sus códigos postales) son: \n - 
+		''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(districts, zipcodes))))
 @bot.message_handler(commands=['zipcodes'])
-def test(message):
-	bot.reply_to(message, '\n'.join(sorted(sorted_zipcodes)))
+def zipcodes_info(message):
+	zipcodes, districts = ebm.show_grouped(ebm.st, to_group=zipcode_col, to_agg=district_col)
+	bot.reply_to(
+		message, 
+		'''Los códigos postales disponibles (y las colonias que engloban) son:
+	 	- ''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(zipcodes, districts))))
 
 
 # Mapa para el código postal indicado
@@ -96,5 +112,6 @@ def send_options_then_map(message):
 	for district_option in ebm.district_options:
 		markup.add(KeyboardButton(f'Colonia {district_option}'))
 	bot.send_message(message.chat.id, "¿Qué colonia quieres ver?", reply_markup=markup)
+
 
 bot.infinity_polling()
