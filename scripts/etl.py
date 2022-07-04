@@ -166,7 +166,7 @@ class EcoBiciMap(UtilClass):
         # except: pass
 
         # Grafica el mapa de las colonias en CDMX
-        self.gdf.plot(ax=ax, figsize=(8, 8), linewidth=0.5, **kwargs)
+        self.gdf.plot(ax=ax, figsize=(8, 8), linewidth=0.5, color='#ffffff', edgecolor='#00acee', **kwargs)
         # Agrega etiquetas de calles/colonias
         add_basemap(ax, crs=self.gdf.crs, source=providers.Stamen.TonerLabels, interpolation='sinc', aspect='equal')
 

@@ -1,15 +1,13 @@
+from os import getenv
 from etl import EcoBiciMap
 from telebot import TeleBot
+from dotenv import load_dotenv
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 
-# from os import getenv
-# ECOBICI_CLIENT_ID = getenv('ECOBICI_CLIENT_ID')
-# ECOBICI_CLIENT_SECRET = getenv('ECOBICI_CLIENT_SECRET')
-# TELEGRAM_API_KEY = getenv('TELEGRAM_API_KEY')
-
-ECOBICI_CLIENT_ID = '2199_132ley5lk3404wkk4c4w4ggo48kwcokosogg0k0www84s08gs'
-ECOBICI_CLIENT_SECRET = '61xytd2ketssok44g4kkckwogkg048gk0ok48sc0k0wgc8scs'
-TELEGRAM_API_KEY = '5424781174:AAGSCoHB5NXzsdRPPRR-9qXQ8VtuLhT8I34'
+load_dotenv()
+ECOBICI_CLIENT_ID = getenv('ECOBICI_CLIENT_ID')
+ECOBICI_CLIENT_SECRET = getenv('ECOBICI_CLIENT_SECRET')
+TELEGRAM_API_KEY = getenv('TELEGRAM_API_KEY')
 
 district_col = 'districtName'
 zipcode_col = 'zipCode'
@@ -65,7 +63,7 @@ Inténtalo! Te reto 😏
 def update_map(message):
 	ebm.st = ebm.get_data()
 	ebm.av = ebm.get_data(availability=True)
-	bot.send_message(message.chat.id, f'La base de datos de Ecobici, ha sido actualizada\n{ebm.got_data_at}hrs')
+	bot.send_message(message.chat.id, f'La base de datos de Ecobici, ha sido actualizada:\n{ebm.got_data_at}hrs')
 	print('Map ready!')
 
 
@@ -90,7 +88,7 @@ def zipcodes_info(message):
 @bot.message_handler(commands=['todo'])
 def full_map(message):
 	df = ebm.transform()
-	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
+	img = ebm.plot_map(df)
 	bot.reply_to(message, 'CDMX:')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
 	print('Map sent!')
@@ -107,7 +105,7 @@ def send_map(message):
 	df = ebm.transform(filter_col=zipcode_col, filter_value=zipcode)
 	if df.shape[0] == 0: bot.reply_to(message, f'Código postal: {zipcode} no cuenta con información disponible')
 	else:
-		img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
+		img = ebm.plot_map(df)
 		bot.reply_to(message, f'Código Postal {zipcode}:')
 		bot.send_photo(chat_id=message.chat.id, photo=img)
 		print(f'CP: {zipcode} sent!')
@@ -126,7 +124,7 @@ def district_clear(message):
 def send_map(message):
 	district = ebm.district_options[0]
 	df = ebm.transform(filter_col=district_col, filter_value=district)
-	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
+	img = ebm.plot_map(df)
 	bot.reply_to(message, f'Colonia {district}:')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
 	print(f'{district} map sent!')
@@ -144,7 +142,7 @@ def district_not_clear(message):
 @bot.message_handler(func=district_not_clear)
 def send_options_then_map(message):
 	bot.reply_to(message, f'Encontré {len(ebm.district_options)} opciones:\n\n - '+'\n - '.join(map(str, ebm.district_options)))
-	markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=False, one_time_keyboard=True)
+	markup = ReplyKeyboardMarkup(resize_keyboard=False, one_time_keyboard=True)
 	for district_option in ebm.district_options:
 		markup.add(KeyboardButton(f'Col {district_option}'))
 	bot.send_message(message.chat.id, "¿Qué colonia quieres ver?", reply_markup=markup)
