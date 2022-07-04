@@ -34,23 +34,29 @@ def hi_there(message):
 	bot.send_message(
 		message.chat.id,
 '''
-Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar si alcanzas tu bici en CDMX
+Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar si alcanzas tu bici en CDMX 
 🚴🏾‍♀️🚴🏾‍♂️
-
-Ahora sí, las instrucciones son simples:
-- /todo --> Disponibilidad en CDMX
-- /colonias --> Lista de colonias disponibles
-- /zipcodes --> Lista de códigos postales disponibles
-- /update --> Actualiza el mapa consultando los datos en vivo 🤯
-
-Además, puedes consultar cierta zona, ya sea buscando por código postal o colonia 🔍
-- zipcode 06500 --> Dispo sólo en código postal 06500, puedes cambiarlo al que quieras!
-- Colonia Centro --> Dispo sólo en el centro, obvio puedes cambiar el nombre de la colonia
-- Col valle --> También puedes consultar las opciones más parecidas a tu búsqueda
-- col anpliasion --> Incluso omite algunas faltas de ortografía y te da las opciones más parecidas
-
-Inténtalo, te reto 😏
 ¿Quieres ver este tutorial de nuevo? Sólo tienes que mandar /help 
+
+Las instrucciones son simples:
+- /todo --> Disponibilidad en CDMX
+- /colonias --> Lista de colonias
+- /zipcodes --> Códigos postales
+- /update --> Actualizo mapa en vivo 🤯
+
+
+Además, te puedo muestrar una zona específica, puedes preguntarme:
+- zipcode 06500
+	 └── Cambia al CP que quieras!
+- Colonia Centro
+	 └── También la colonia
+- Col valle 
+	 └── Te indico varias opciones
+- col anpliasion
+	 └── Incluso corrijo ortografía 🤭
+
+
+Inténtalo! Te reto 😏
 '''
 	)
 
@@ -69,15 +75,15 @@ def districts_info(message):
 	districts, zipcodes = ebm.show_grouped(ebm.st, to_group=district_col, to_agg=zipcode_col)
 	bot.reply_to(
 		message, 
-		'''Las colonias disponibles (y sus códigos postales) son: \n - 
-		''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(districts, zipcodes))))
+		'''Las colonias disponibles (y sus códigos postales) son:
+		\n\n - ''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(districts, zipcodes))))
 @bot.message_handler(commands=['zipcodes'])
 def zipcodes_info(message):
 	zipcodes, districts = ebm.show_grouped(ebm.st, to_group=zipcode_col, to_agg=district_col)
 	bot.reply_to(
 		message, 
 		'''Los códigos postales disponibles (y las colonias que engloban) son:
-	 	- ''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(zipcodes, districts))))
+	 	\n\n - ''' + '\n - '.join(map(lambda x: f'{x[0]}:   {x[-1]}', zip(zipcodes, districts))))
 
 
 # Consulta todo el mapa
@@ -85,7 +91,7 @@ def zipcodes_info(message):
 def full_map(message):
 	df = ebm.transform()
 	img = ebm.plot_map(df, color='#ffffff', edgecolor='#00acee')
-	bot.reply_to(message, 'Disponibilidad en vivo:')
+	bot.reply_to(message, 'CDMX:')
 	bot.send_photo(chat_id=message.chat.id, photo=img)
 	print('Map sent!')
 
@@ -137,7 +143,7 @@ def district_not_clear(message):
 	else: return False
 @bot.message_handler(func=district_not_clear)
 def send_options_then_map(message):
-	bot.reply_to(message, 'Las opciones podrían ser:\n\n-'+'\n-'.join([str(x) for x in ebm.district_options]))
+	bot.reply_to(message, f'Encontré {len(ebm.district_options)} opciones:\n\n - '+'\n - '.join(map(str, ebm.district_options)))
 	markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=False, one_time_keyboard=True)
 	for district_option in ebm.district_options:
 		markup.add(KeyboardButton(f'Col {district_option}'))
