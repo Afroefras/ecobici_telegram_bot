@@ -1,5 +1,5 @@
 from etl import EcoBiciMap
-from telebot import TeleBot, formatting
+from telebot import TeleBot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 
 # from os import getenv
@@ -30,19 +30,37 @@ bot = TeleBot(TELEGRAM_API_KEY)
 
 # Instrucciones de uso
 @bot.message_handler(commands=['start','help'])
-def test(message):
+def hi_there(message):
 	bot.send_message(
 		message.chat.id,
-		'''
-		Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar qué tantas bicis hay disponibles en CDMX 🚴🏾‍♀️🚴🏾‍♂️
-		\n¿Quieres ver este tutorial de nuevo? Sólo tienes que mandar /help 
+'''
+Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar si alcanzas tu bici en CDMX
+🚴🏾‍♀️🚴🏾‍♂️
 
-		\nAhora sí, las instrucciones son simples:
-		\n\t- /todo         Disponibilidad en CDMX
-		\n\t- /colonias     Lista de colonias disponibles
-		\n\t- /colonias     Lista de códigos postales disponibles
-		'''
+Ahora sí, las instrucciones son simples:
+- /todo --> Disponibilidad en CDMX
+- /colonias --> Lista de colonias disponibles
+- /zipcodes --> Lista de códigos postales disponibles
+- /update --> Actualiza el mapa consultando los datos en vivo 🤯
+
+Además, puedes consultar cierta zona, ya sea buscando por código postal o colonia 🔍
+- zipcode 06500 --> Dispo sólo en código postal 06500, puedes cambiarlo al que quieras!
+- Colonia Centro --> Dispo sólo en el centro, obvio puedes cambiar el nombre de la colonia
+- Col valle --> También puedes consultar las opciones más parecidas a tu búsqueda
+- col anpliasion --> Incluso omite algunas faltas de ortografía y te da las opciones más parecidas
+
+Inténtalo, te reto 😏
+¿Quieres ver este tutorial de nuevo? Sólo tienes que mandar /help 
+'''
 	)
+
+
+@bot.message_handler(commands=['update'])
+def update_map(message):
+	ebm.st = ebm.get_data()
+	ebm.av = ebm.get_data(availability=True)
+	bot.send_message(message.chat.id, f'La base de datos de Ecobici, ha sido actualizada\n{ebm.got_data_at}hrs')
+	print('Map ready!')
 
 
 # Consultar las colonias y/o códigos postales disponibles
@@ -94,7 +112,7 @@ def district_clear(message):
 	request = message.text.split()
 	if request[0].lower()[:3]=='col':
 		district = ' '.join(request[1:])
-		ebm.district_options = ebm.give_options(district, valid_districts, max_options=1, n=1, cutoff=0.6)
+		ebm.district_options = ebm.give_options(district, valid_districts, max_options=5, n=5, cutoff=0.5)
 		if len(ebm.district_options)==1: return True
 		else: return False
 	else: return False
@@ -113,7 +131,7 @@ def district_not_clear(message):
 	request = message.text.split()
 	if request[0].lower()[:3]=='col':
 		district = ' '.join(request[1:])
-		ebm.district_options = ebm.give_options(district, valid_districts, max_options=5, n=5, cutoff=0.6)
+		ebm.district_options = ebm.give_options(district, valid_districts, max_options=5, n=5, cutoff=0.5)
 		if len(ebm.district_options) > 1: return True
 		else: return False
 	else: return False
@@ -122,7 +140,7 @@ def send_options_then_map(message):
 	bot.reply_to(message, 'Las opciones podrían ser:\n\n-'+'\n-'.join([str(x) for x in ebm.district_options]))
 	markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=False, one_time_keyboard=True)
 	for district_option in ebm.district_options:
-		markup.add(KeyboardButton(f'Colonia {district_option}'))
+		markup.add(KeyboardButton(f'Col {district_option}'))
 	bot.send_message(message.chat.id, "¿Qué colonia quieres ver?", reply_markup=markup)
 
 

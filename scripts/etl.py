@@ -98,6 +98,7 @@ class EcoBiciMap(UtilClass):
         first_key = list(data.keys())[0]
         # Se estructura como tabla 
         df = json_normalize(data[first_key])
+        self.got_data_at = datetime.now().astimezone(tz.gettz('America/Mexico_City')).strftime(r'%d/%b/%Y %H:%M')
         return df
 
 
