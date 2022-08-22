@@ -2,4 +2,4 @@
 
 El usuario solicita el CP y Telegram le devuelve el mapa de disponibilidad de Ecobici en CDMX
 
-![](media/demo.gif?raw=true "Ecobici Telegram Bot")
+![](media/demo_halfsize.gif?raw=true "Ecobici Telegram Bot")
