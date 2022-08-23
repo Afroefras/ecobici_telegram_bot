@@ -1,6 +1,5 @@
-# Ecobici TelegramBot
-
 <p align="center">
+  <h1>Ecobici TelegramBot</h1>
   <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/demo_halfsize.gif" />
 </p>
 
@@ -9,6 +8,7 @@
 2. [Extracción](#Extracción)
 3. [Transformación](#Transformación)
 4. [Interacción](#Interacción)
+5. [Puesta en producción](#Puesta en producción) (En progreso ...)
 
 # Repositorio:
     .
@@ -91,6 +91,7 @@ ebm.transform()
 
 <br><br>
 
+
 6. Se utiliza el shapefile de los [Códigos Postales CDMX](https://datos.cdmx.gob.mx/dataset/7abff432-81a0-4956-8691-0865e2722423/resource/8ee17d1b-2d65-4f23-873e-fefc9e418977) para definir los límites en el mapa
 
 ![](media/cdmx.png?raw=true "Mexico City by zipcodes") 
@@ -112,6 +113,14 @@ ebm.plot_map(
 
 <br><br>
 
+
+# Interacción
+8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) 
+
+
+# Puesta en producción 
+
+(en progreso ...)
 
 
 Quieres comprobarlo?
