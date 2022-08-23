@@ -5,10 +5,10 @@
 </p>
 
 # Índice
-1. [Repositorio](# Repositorio)
-2. [Extracción](# Extracción)
-3. [Transformación](# Transformación)
-4. [Interacción](# Interacción)
+1. [Repositorio](#Repositorio)
+2. [Extracción](#Extracción)
+3. [Transformación](#Transformación)
+4. [Interacción](#Interacción)
 
 # Repositorio:
     .
