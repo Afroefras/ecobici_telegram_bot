@@ -22,8 +22,6 @@ switch_backend('Agg')
 # Clase madre para métodos como limpieza de texto
 from util import UtilClass
 
-# # Modelo
-# import ecoTad, ecoPredict
 
 class EcoBiciMap(UtilClass):
     def __init__(self, client_id: str, client_secret: str, is_local: bool=True) -> None:
@@ -181,15 +179,3 @@ class EcoBiciMap(UtilClass):
         self.eb_map[img_name].savefig(self.media_dir.joinpath(f'{img_name}.png'))
         img = open_image(self.media_dir.joinpath(f'{img_name}.png'))
         return img
-
-
-    # def prediction_data(self, file_name: str, is_local:bool) -> None:
-    #     ecoTad.run_ecotad(is_local=is_local)
-    #     ecoPredict.run_ecopredict(is_local=is_local)
-    #     self.pred = read_csv(self.base_dir.joinpath('data','for_map',file_name))
-    #     print(self.pred.shape)
-    #     self.pred = self.pred.merge(self.av[['id', 'availability.bikes', 'availability.slots']], on='id')
-    #     print(self.pred.shape)
-    #     self.pred['prediction'] = self.pred['prediction'].map(lambda x: 0 if x<0 else x)
-    #     self.pred['bikes_proportion'] = 1 - self.pred['prediction'] / (self.pred['availability.bikes'] + self.pred['availability.slots'])
-    #     self.pred['bikes_proportion'] = self.pred['bikes_proportion'].map(lambda x: 0 if x<0 else x)

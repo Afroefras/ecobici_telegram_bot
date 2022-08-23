@@ -36,14 +36,14 @@ Hola! Soy EcobiciMapBot V1.0 y aquí puedes consultar si alcanzas tu bici en CDM
 🚴🏾‍♀️🚴🏾‍♂️
 ¿Quieres ver este tutorial de nuevo? Sólo tienes que mandar /help 
 
-Las instrucciones son simples:
+Las instrucciones son simples, manda:
 - /todo --> Disponibilidad en CDMX
 - /colonias --> Lista de colonias
 - /zipcodes --> Códigos postales
 - /update --> Actualizo mapa en vivo 🤯
 
 
-Además, te puedo muestrar una zona específica, puedes preguntarme:
+Además, te puedo muestrar una zona específica, puedes mandarme:
 - zipcode 06500
 	 └── Cambia al CP que quieras!
 - Colonia Centro
