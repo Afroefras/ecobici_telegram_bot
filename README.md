@@ -110,7 +110,8 @@ ebm.plot_map(
     edgecolor='#00acee', 
     points_palette='Blues')
 ```
-![](media/for_readme/full_map.png?raw=true "Ecobici Map")
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/full_map.jpeg" width=50% height=50%>
 
 <br><br>
 
