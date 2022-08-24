@@ -118,19 +118,32 @@ ebm.plot_map(
 
 # Interacción
 8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) te muestra las instrucciones del chat
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/01_start.png" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/02_todo.png" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/03_update.png" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/04_zipcode.png" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/05_options.jpeg" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/06_answered.jpeg" width=25% height=25%>
-<br>
-<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/07_typo.png" width=25% height=25%>
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/01_start.png" width=50% height=50%>
+Todas las opciones que comienzan con "\" pueden ser presionadas y son inmediatamente enviadas.
+<br><br>
+
+9. La primer opción
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/02_todo.png" width=50% height=50%>
+
+<br><br>
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/03_update.png" width=50% height=50%>
+
+<br><br>
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/04_zipcode.png" width=50% height=50%>
+
+<br><br>
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/05_options.jpeg" width=50% height=50%>
+
+<br><br>
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/06_answered.jpeg" width=50% height=50%>
+
+<br><br>
+
+<img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/07_typo.png" width=50% height=50%>
 
 # Puesta en producción 
 
