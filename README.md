@@ -1,6 +1,7 @@
+<h1 align='center'>Ecobici TelegramBot</h1>
+
 <p align="center">
-  <h1>Ecobici TelegramBot</h1>
-  <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/demo_halfsize.gif" />
+  <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/demo_halfsize.gif" />
 </p>
 
 # Índice
@@ -8,7 +9,7 @@
 2. [Extracción](#Extracción)
 3. [Transformación](#Transformación)
 4. [Interacción](#Interacción)
-5. [Puesta en producción](#Puesta en producción) (En progreso ...)
+5. [Puesta en producción](#Puesta-en-producción) (En progreso ...)
 
 # Repositorio:
     .
@@ -94,7 +95,7 @@ ebm.transform()
 
 6. Se utiliza el shapefile de los [Códigos Postales CDMX](https://datos.cdmx.gob.mx/dataset/7abff432-81a0-4956-8691-0865e2722423/resource/8ee17d1b-2d65-4f23-873e-fefc9e418977) para definir los límites en el mapa
 
-![](media/cdmx.png?raw=true "Mexico City by zipcodes") 
+![](media/for_readme/cdmx.png?raw=true "Mexico City by zipcodes") 
 
 <br><br>
 
@@ -109,13 +110,14 @@ ebm.plot_map(
     edgecolor='#00acee', 
     points_palette='Blues')
 ```
-![](media/map.png?raw=true "Ecobici Map")
+![](media/for_readme/full_map.png?raw=true "Ecobici Map")
 
 <br><br>
 
 
 # Interacción
-8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) 
+8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) te muestra las instrucciones del chat
+![](media/for_readme/01_start.png?raw=true "Instrucciones")
 
 
 # Puesta en producción 
