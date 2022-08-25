@@ -128,22 +128,22 @@ Todas las opciones que comienzan con "\" pueden ser presionadas y son inmediatam
 
 <br><br>
 
-9. Tal como en [Ecobici TwitterBot](https://twitter.com/EcobiciMapBot), este bot puede mostrar la disponibilidad total de CDMX mandando el comando *\todo*
+9. Tal como en [Ecobici TwitterBot](https://twitter.com/EcobiciMapBot), este bot puede mostrar la disponibilidad total de CDMX mandando el comando `\todo`
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/02_todo.png" width=50% height=50%>
 
 <br><br>
 
-10. Incluso puedes actualizar los datos en cualquier momento mandando *\update*
+10. Incluso puedes actualizar los datos en cualquier momento mandando `\update`
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/03_update.png" width=50% height=50%>
 
 <br><br>
 
-11. Ahora, veamos las opciones que filtran una zona en el mapa. En primer lugar está la consulta por código postal, sólo basta con ocupar la palabra *zipcode XXXX* para filtrar en el mapa la zona con código postal *XXXX*
+11. Ahora, veamos las opciones que filtran una zona en el mapa. En primer lugar está la consulta por código postal, sólo basta con ocupar la palabra `zipcode XXXX` para filtrar en el mapa la zona con código postal `XXXX`
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/04_zipcode.png" width=50% height=50%>
 
 <br><br>
 
-12. Por otro lado, es posible filtrar zonas más específicas indicando la colonia. La manera de hacerlo es mandando *colonia XXXX* o bien la abreviatura *col XXXX*. Si el texto recibido se parece a más de una colonia, te mostrará máx 5 opciones para que elijas cuál consultar.
+12. Por otro lado, es posible filtrar zonas más específicas indicando la colonia. La manera de hacerlo es mandando `colonia XXXX` o bien la abreviatura `col XXXX`. Si el texto recibido se parece a más de una colonia, te mostrará máx 5 opciones para que elijas cuál consultar.
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/05_options.jpeg" width=50% height=50%>
 
 <br>
