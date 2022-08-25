@@ -120,35 +120,36 @@ ebm.plot_map(
 8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) te muestra las instrucciones del chat
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/01_start.png" width=50% height=50%>
 Todas las opciones que comienzan con "\" pueden ser presionadas y son inmediatamente enviadas.
+
 <br><br>
 
-9. La primer opción
+9. Tal como en [Ecobici TwitterBot](https://twitter.com/EcobiciMapBot), este bot puede mostrar la disponibilidad total de CDMX mandando el comando *\todo*
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/02_todo.png" width=50% height=50%>
 
 <br><br>
 
+10. Incluso puedes actualizar los datos en cualquier momento mandando *\update*
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/03_update.png" width=50% height=50%>
 
 <br><br>
 
+11. Ahora, veamos las opciones que filtran una zona en el mapa. En primer lugar está la consulta por código postal, sólo basta con ocupar la palabra *zipcode XXXX* para filtrar en el mapa la zona con código postal *XXXX*
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/04_zipcode.png" width=50% height=50%>
 
 <br><br>
 
+12. Por otro lado, es posible filtrar zonas más específicas indicando la colonia. La manera de hacerlo es mandando *colonia XXXX* o bien la abreviatura *col XXXX*. Si el texto recibido se parece a más de una colonia, te mostrará máx 5 opciones para que elijas cuál consultar.
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/05_options.jpeg" width=50% height=50%>
 
-<br><br>
+<br>
 
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/06_answered.jpeg" width=50% height=50%>
 
 <br><br>
 
+13. Incluso, dado que utiliza [difflib.SequenceMatcher](https://docs.python.org/2/library/difflib.html#sequencematcher-objects) para comparar el texto recibido vs las opciones de colonias válidas, también "corrige" las faltas de ortografía, por ejemplo:
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/07_typo.png" width=50% height=50%>
 
 # Puesta en producción 
 
-(en progreso ...)
-
-
-Quieres comprobarlo?
-
+La investigación preliminar apunta que el script debe instanciarse en un servidor, cómo hacerlo está en progreso, espérenlo ...
