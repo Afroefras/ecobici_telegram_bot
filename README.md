@@ -11,6 +11,10 @@
 4. [Interacción](#Interacción)
 5. [Puesta en producción](#Puesta-en-producción) (En progreso ...)
 
+<br>
+--------------------------------------------------------------------------------------------
+<br>
+
 # Repositorio:
     .
     ├── data/shp                      # Archivos necesarios para desplegar los límites por Código Postal en CDMX
@@ -39,7 +43,7 @@
 <br><br>
 
 
-2. Instanciar la clase para obtener los datos al momento
+2. Así, puedes instanciar la clase para obtener los datos al momento
 ```python
 from map import EcoBiciMap
 
@@ -52,7 +56,7 @@ ebm.get_token(first_time=True)
 <br><br>
 
 
-3. Información respecto a las estaciones, incluyendo coordenadas
+3. Se puede extraer información respecto a las estaciones, incluyendo coordenadas
 ```python
 ebm.get_data()
 ```
@@ -65,7 +69,7 @@ ebm.get_data()
 <br><br>
 
 
-4. Disponibilidad de las estaciones (mismo método pero especificando un parámetro)
+4. Y también la disponibilidad de las estaciones (mismo método pero especificando un parámetro)
 ```python
 ebm.get_data(availability=True)
 ```
@@ -80,7 +84,7 @@ ebm.get_data(availability=True)
 
 # Transformación
 
-5. Filtrar las estaciones con estatus activo, unir ambas tablas y calcular la proporción de bicicletas y slots
+5. Es importante filtrar las estaciones con estatus activo, unir ambas tablas y calcular la proporción de bicicletas y slots
 ```python
 ebm.transform()
 ```
@@ -93,14 +97,14 @@ ebm.transform()
 <br><br>
 
 
-6. Se utiliza el shapefile de los [Códigos Postales CDMX](https://datos.cdmx.gob.mx/dataset/7abff432-81a0-4956-8691-0865e2722423/resource/8ee17d1b-2d65-4f23-873e-fefc9e418977) para definir los límites en el mapa
+6. Se utilizará el shapefile de los [Códigos Postales CDMX](https://datos.cdmx.gob.mx/dataset/7abff432-81a0-4956-8691-0865e2722423/resource/8ee17d1b-2d65-4f23-873e-fefc9e418977) para definir los límites en el mapa
 
 ![](media/for_readme/cdmx.png?raw=true "Mexico City by zipcodes") 
 
 <br><br>
 
 
-7. Unir ambos mapas, utilizando las coordenadas y disponibilidad de las estaciones
+7. Al unir ambos mapas, utilizando las coordenadas y disponibilidad de las estaciones, este es el resultado:
 ```python
 ebm.plot_map(
     data=ebm.df,
@@ -117,6 +121,7 @@ ebm.plot_map(
 
 
 # Interacción
+
 8. Al [iniciar un chat con Ecobici TelegramBot](t.me/EcobicimapBot) te muestra las instrucciones del chat
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/01_start.png" width=50% height=50%>
 Todas las opciones que comienzan con "\" pueden ser presionadas y son inmediatamente enviadas.
@@ -149,6 +154,8 @@ Todas las opciones que comienzan con "\" pueden ser presionadas y son inmediatam
 
 13. Incluso, dado que utiliza [difflib.SequenceMatcher](https://docs.python.org/2/library/difflib.html#sequencematcher-objects) para comparar el texto recibido vs las opciones de colonias válidas, también "corrige" las faltas de ortografía, por ejemplo:
 <img src="https://github.com/Afroefras/ecobici_telegram_bot/blob/main/media/for_readme/07_typo.png" width=50% height=50%>
+
+<br><br>
 
 # Puesta en producción 
 
